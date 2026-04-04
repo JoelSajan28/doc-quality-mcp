@@ -4,7 +4,7 @@ import json
 import sys
 from typing import Any
 
-from analyzer import analyze_document
+from manual_stdio.analyzer import analyze_document
 
 
 TOOL_DEFINITIONS = [
