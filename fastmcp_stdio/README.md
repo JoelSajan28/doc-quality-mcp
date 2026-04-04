@@ -58,7 +58,7 @@ doc-quality-mcp/
 ## Step 1: Go to project root
 
 ```bash
-cd "/Users/joelsajan/Desktop/Dev Academy Amplified/Dev Academy Code/doc-quality-mcp"
+cd "<location of project>/doc-quality-mcp"
 ```
 
 ---
