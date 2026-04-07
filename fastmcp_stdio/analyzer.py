@@ -33,8 +33,7 @@ def extract_headings(text: str) -> list[str]:
 
 def extract_paragraphs(text: str) -> list[str]:
     chunks = re.split(r"\n\s*\n", text.strip())
-    paragraphs = [chunk.strip() for chunk in chunks if chunk.strip()]
-    return paragraphs
+    return [chunk.strip() for chunk in chunks if chunk.strip()]
 
 
 def count_long_paragraphs(paragraphs: list[str], threshold: int = 500) -> int:
@@ -68,7 +67,6 @@ def analyze_document(file_path: str) -> dict[str, Any]:
     weaknesses: list[str] = []
     suggestions: list[str] = []
 
-    # Title
     if title != "Untitled Document":
         strengths.append("Document has a clear title.")
     else:
@@ -76,7 +74,6 @@ def analyze_document(file_path: str) -> dict[str, Any]:
         weaknesses.append("Document does not have a clear title.")
         suggestions.append("Add a top-level title to establish the document purpose.")
 
-    # Structure
     if heading_count >= 4:
         strengths.append("Document has a strong section structure.")
     elif heading_count >= 2:
@@ -86,7 +83,6 @@ def analyze_document(file_path: str) -> dict[str, Any]:
         weaknesses.append("Document has limited section structure.")
         suggestions.append("Break the document into clearer sections with headings.")
 
-    # Length / completeness
     if content_length >= 500:
         strengths.append("Document has a reasonable amount of content.")
     else:
@@ -94,7 +90,6 @@ def analyze_document(file_path: str) -> dict[str, Any]:
         weaknesses.append("Document is too short to feel complete.")
         suggestions.append("Expand the document with more detail, examples, or explanation.")
 
-    # Intro / conclusion
     if keyword_flags["has_intro"]:
         strengths.append("Document includes an introduction or overview section.")
     else:
@@ -109,7 +104,6 @@ def analyze_document(file_path: str) -> dict[str, Any]:
         weaknesses.append("Document does not include a conclusion.")
         suggestions.append("Add a conclusion to summarize the main takeaways.")
 
-    # Problem/solution clarity
     if keyword_flags["has_problem"] and keyword_flags["has_solution"]:
         strengths.append("Document clearly covers both the problem and the solution.")
     elif keyword_flags["has_problem"] or keyword_flags["has_solution"]:
@@ -119,7 +113,6 @@ def analyze_document(file_path: str) -> dict[str, Any]:
         weaknesses.append("Document does not clearly frame a problem and solution.")
         suggestions.append("Add sections that explain the challenge and the proposed solution.")
 
-    # Paragraph readability
     if long_paragraph_count == 0:
         strengths.append("Paragraphs are reasonably sized and readable.")
     else:
@@ -127,7 +120,6 @@ def analyze_document(file_path: str) -> dict[str, Any]:
         weaknesses.append(f"Document has {long_paragraph_count} overly long paragraph(s).")
         suggestions.append("Break long paragraphs into smaller, easier-to-read sections.")
 
-    # Clean up score bounds
     score = max(0.0, min(10.0, round(score, 1)))
 
     overall_rating = (
@@ -151,11 +143,3 @@ def analyze_document(file_path: str) -> dict[str, Any]:
         "weaknesses": weaknesses,
         "suggestions": suggestions,
     }
-
-
-if __name__ == "__main__":
-    sample_path = "docs/sample_doc.md"
-    result = analyze_document(sample_path)
-
-    import json
-    print(json.dumps(result, indent=2))
